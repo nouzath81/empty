@@ -34,81 +34,81 @@
       align-items:start;
     }
     .col-right{ position:sticky; top:24px; }
-    h1{ font-size:26px; }
-    .sub{ font-size:14px; }
+    h1{ font-size:28px; }
+    .sub{ font-size:16px; }
   }
   @media (min-width: 1080px){
     .wrap{ max-width:1080px; }
   }
-  h1{ font-size:22px; font-weight:600; margin:0 0 4px; letter-spacing:-0.01em; }
-  h2{ font-size:16px; font-weight:600; margin:0 0 10px; }
-  .sub{ font-size:14px; color:var(--muted); margin:0 0 20px; }
+  h1{ font-size:24px; font-weight:600; margin:0 0 4px; letter-spacing:-0.01em; }
+  h2{ font-size:18px; font-weight:600; margin:0 0 10px; }
+  .sub{ font-size:15px; color:var(--muted); margin:0 0 20px; }
   .card{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:14px; }
-  .label{ font-size:13px; color:var(--muted); margin-bottom:6px; display:block; }
+  .label{ font-size:14px; color:var(--muted); margin-bottom:6px; display:block; }
   select, input{
-    width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:8px;
-    font-size:16px; background:var(--card); color:var(--ink); font-family:inherit;
+    width:100%; padding:12px 12px; border:1px solid var(--line); border-radius:8px;
+    font-size:17px; background:var(--card); color:var(--ink); font-family:inherit;
   }
-  .error{ color:var(--red); font-size:13px; margin-top:8px; }
+  .error{ color:var(--red); font-size:14px; margin-top:8px; }
   .row-inline{ display:flex; gap:8px; align-items:flex-end; }
   .row-inline > div{ flex:1; }
   .btn{
-    padding:10px 12px; border:1px solid var(--line); border-radius:8px;
-    background:var(--card); color:var(--ink); font-size:15px; cursor:pointer; white-space:nowrap;
+    padding:11px 13px; border:1px solid var(--line); border-radius:8px;
+    background:var(--card); color:var(--ink); font-size:16px; cursor:pointer; white-space:nowrap;
   }
   .btn.primary{ background:var(--teal); color:#fff; border:none; }
   .btn.danger{ color:var(--red); }
   .room-row{
     display:flex; align-items:center; justify-content:space-between;
-    padding:10px 8px; border-bottom:1px solid var(--line); gap:8px; border-radius:8px;
+    padding:11px 8px; border-bottom:1px solid var(--line); gap:8px; border-radius:8px;
   }
   .room-row:last-child{ border-bottom:none; }
   .room-row.booked{ background:var(--red-light); }
   .room-row.booked label{ color:var(--red); font-weight:500; }
   .room-row.booked .rate{ color:var(--red); }
   .room-check{ display:flex; align-items:center; gap:10px; flex:1; }
-  .room-check input[type=checkbox]{ width:18px; height:18px; flex:none; }
-  .room-check label{ font-size:15px; cursor:pointer; flex:1; }
-  .rate{ color:var(--muted); font-size:13px; }
+  .room-check input[type=checkbox]{ width:20px; height:20px; flex:none; }
+  .room-check label{ font-size:17px; cursor:pointer; flex:1; }
+  .rate{ color:var(--muted); font-size:15px; }
   .cal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
   .cal-head button{
     border:1px solid var(--line); background:var(--card); border-radius:6px;
-    width:30px; height:30px; font-size:15px; cursor:pointer; color:var(--ink);
+    width:34px; height:34px; font-size:17px; cursor:pointer; color:var(--ink);
   }
-  .cal-head span{font-size:14px; font-weight:600;}
+  .cal-head span{font-size:16px; font-weight:600;}
   .grid7{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; text-align:center; }
-  .dow{ font-size:11px; color:var(--muted); padding-bottom:4px; }
+  .dow{ font-size:12px; color:var(--muted); padding-bottom:4px; }
   .day{
     aspect-ratio:1; display:flex; align-items:center; justify-content:center;
-    border-radius:7px; font-size:14px; cursor:pointer; border:1px solid transparent; position:relative;
+    border-radius:7px; font-size:16px; cursor:pointer; border:1px solid transparent; position:relative;
   }
   @media (min-width: 720px){
-    .day{ font-size:16px; }
-    .room-row{ padding:12px 8px; }
-    input[type=text], input[type=tel], input[type=number]{ padding:11px 14px; }
+    .day{ font-size:18px; }
+    .room-row{ padding:13px 8px; }
+    input[type=text], input[type=tel], input[type=number]{ padding:12px 14px; }
   }
   .day.empty{cursor:default;}
   .day.today{border-color:var(--teal);}
   .day.booked{background:var(--red-light); color:var(--red);}
   .day.selected{background:var(--teal); color:#fff;}
   .day.past{color:#c9c6b8; cursor:not-allowed;}
-  .legend{ display:flex; gap:14px; font-size:12px; color:var(--muted); margin-top:10px; }
+  .legend{ display:flex; gap:14px; font-size:13px; color:var(--muted); margin-top:10px; }
   .dot{width:8px; height:8px; border-radius:2px; display:inline-block; margin-right:4px;}
-  .status{ padding:12px 14px; border-radius:8px; font-size:15px; font-weight:500; margin-bottom:14px; }
+  .status{ padding:13px 14px; border-radius:8px; font-size:16px; font-weight:500; margin-bottom:14px; }
   .status.available{background:var(--teal-light); color:var(--teal-dark);}
   .status.unavailable{background:var(--red-light); color:var(--red);}
   .status.pick{background:var(--amber-light); color:var(--amber);}
   button.book{
-    width:100%; padding:13px; border:none; border-radius:8px; background:var(--teal);
-    color:#fff; font-size:16px; font-weight:600; cursor:pointer;
+    width:100%; padding:14px; border:none; border-radius:8px; background:var(--teal);
+    color:#fff; font-size:18px; font-weight:600; cursor:pointer;
   }
   button.book:disabled{background:#c9c6b8; cursor:not-allowed;}
-  .booklist{font-size:14px;}
-  .booklist .row{ display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); }
+  .booklist{font-size:15px;}
+  .booklist .row{ display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--line); }
   .booklist .row:last-child{border-bottom:none;}
-  .cancel{ color:var(--red); background:none; border:none; font-size:13px; cursor:pointer; text-decoration:underline; }
-  .empty-note{color:var(--muted); font-size:14px;}
-  .total-line{ font-size:14px; color:var(--muted); margin:8px 0 14px; }
+  .cancel{ color:var(--red); background:none; border:none; font-size:14px; cursor:pointer; text-decoration:underline; }
+  .empty-note{color:var(--muted); font-size:15px;}
+  .total-line{ font-size:15px; color:var(--muted); margin:8px 0 14px; }
 </style>
 </head>
 <body>
