@@ -9,10 +9,10 @@
     --paper:#f6f4ee;
     --card:#ffffff;
     --line:#dcd8cc;
-    --teal:#0f6e56;
-    --teal-dark:#04342c;
-    --teal-light:#e1f5ee;
-    --leaf:#3fae74;
+    --teal:#1e4a8c;
+    --teal-dark:#0a2647;
+    --teal-light:#e3ecfa;
+    --leaf:#2f6fd1;
     --sky:#2f8fd1;
     --sky-light:#e5f1fb;
     --coral:#e2643f;
@@ -48,9 +48,9 @@
   h1{ font-size:48px; font-weight:700; margin:0; letter-spacing:-0.01em; color:#fff; }
   h2{ font-size:36px; font-weight:600; margin:0 0 10px; }
   .header-banner{
-    background: linear-gradient(135deg, var(--teal) 0%, #147a5f 45%, var(--leaf) 100%);
+    background: linear-gradient(135deg, var(--teal) 0%, #163f74 45%, var(--leaf) 100%);
     border-radius:14px; padding:20px 18px; margin-bottom:18px;
-    box-shadow: 0 4px 14px rgba(15,110,86,0.25);
+    box-shadow: 0 4px 14px rgba(20,60,120,0.25);
   }
   .sub{ font-size:30px; color:rgba(255,255,255,0.88); margin:6px 0 0; }
   .card{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:14px; border-top:4px solid var(--line); }
@@ -285,7 +285,7 @@ function renderRoomCheckboxes(){
         <input type="checkbox" id="${id}" ${selectedRooms.has(r.room) ? 'checked' : ''}>
         <label for="${id}">Room ${r.room}${isBooked ? ' — booked' : ''}</label>
       </div>
-      <span class="rate">₹${r.amount}/night</span>
+      <span class="rate">Rs.${r.amount}/night</span>
     `;
     row.querySelector('input').addEventListener('change', (e)=>{
       if(e.target.checked) selectedRooms.add(r.room);
@@ -388,7 +388,7 @@ function renderStatus(){
       return sum + (room ? Number(room.amount) : 0);
     }, 0);
     statusBox.innerHTML = `<div class="status available">Room${roomList.length>1?'s':''} ${roomList.join(', ')} available on ${niceDate}.</div>`;
-    totalLine.textContent = `Total rate for selected rooms: ₹${total}/night`;
+    totalLine.textContent = `Total rate for selected rooms: Rs.${total}/night`;
     bookBtn.disabled = false;
     bookBtn.textContent = "Book " + roomList.length + " room" + (roomList.length>1?'s':'');
     detailsCard.style.display = "block";
@@ -446,7 +446,7 @@ function renderBookingList(){
     row.innerHTML = `<div>
         <div style="font-weight:500;">Room ${room} — ${nice}</div>
         <div style="color:var(--muted); font-size:24px; margin-top:2px;">
-          ${info.name || ""}${info.phone ? " · " + info.phone : ""}${info.amount ? " · rate ₹" + info.amount : ""}${info.advance ? " · advance ₹" + info.advance : ""}
+          ${info.name || ""}${info.phone ? " · " + info.phone : ""}${info.amount ? " · rate Rs." + info.amount : ""}${info.advance ? " · advance Rs." + info.advance : ""}
         </div>
       </div>`;
     const btn = document.createElement('button');
