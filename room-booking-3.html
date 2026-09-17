@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Green Villa Oluvil — Room Booking</title>
+<style>
+  :root{
+    --ink:#1f2a24;
+    --paper:#f6f4ee;
+    --card:#ffffff;
+    --line:#dcd8cc;
+    --teal:#0f6e56;
+    --teal-dark:#04342c;
+    --teal-light:#e1f5ee;
+    --amber:#ba7517;
+    --amber-light:#faeeda;
+    --red:#a32d2d;
+    --red-light:#fcebeb;
+    --muted:#6b6a63;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--paper); color:var(--ink); padding:20px 14px 40px; }
+  .wrap{max-width:480px; margin:0 auto;}
+  .layout-grid{ display:block; }
+  .col-left, .col-right{ display:block; }
+  @media (min-width: 720px){
+    .wrap{ max-width:960px; padding:0 20px; }
+    body{ padding:32px 20px 48px; }
+    .layout-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:24px;
+      align-items:start;
+    }
+    .col-right{ position:sticky; top:24px; }
+    h1{ font-size:26px; }
+    .sub{ font-size:14px; }
+  }
+  @media (min-width: 1080px){
+    .wrap{ max-width:1080px; }
+  }
+  h1{ font-size:22px; font-weight:600; margin:0 0 4px; letter-spacing:-0.01em; }
+  h2{ font-size:16px; font-weight:600; margin:0 0 10px; }
+  .sub{ font-size:14px; color:var(--muted); margin:0 0 20px; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:14px; }
+  .label{ font-size:13px; color:var(--muted); margin-bottom:6px; display:block; }
+  select, input{
+    width:100%; padding:11px 12px; border:1px solid var(--line); border-radius:8px;
+    font-size:16px; background:var(--card); color:var(--ink); font-family:inherit;
+  }
+  .error{ color:var(--red); font-size:13px; margin-top:8px; }
+  .row-inline{ display:flex; gap:8px; align-items:flex-end; }
+  .row-inline > div{ flex:1; }
+  .btn{
+    padding:10px 12px; border:1px solid var(--line); border-radius:8px;
+    background:var(--card); color:var(--ink); font-size:15px; cursor:pointer; white-space:nowrap;
+  }
+  .btn.primary{ background:var(--teal); color:#fff; border:none; }
+  .btn.danger{ color:var(--red); }
+  .room-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 8px; border-bottom:1px solid var(--line); gap:8px; border-radius:8px;
+  }
+  .room-row:last-child{ border-bottom:none; }
+  .room-row.booked{ background:var(--red-light); }
+  .room-row.booked label{ color:var(--red); font-weight:500; }
+  .room-row.booked .rate{ color:var(--red); }
+  .room-check{ display:flex; align-items:center; gap:10px; flex:1; }
+  .room-check input[type=checkbox]{ width:18px; height:18px; flex:none; }
+  .room-check label{ font-size:15px; cursor:pointer; flex:1; }
+  .rate{ color:var(--muted); font-size:13px; }
+  .cal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+  .cal-head button{
+    border:1px solid var(--line); background:var(--card); border-radius:6px;
+    width:30px; height:30px; font-size:15px; cursor:pointer; color:var(--ink);
+  }
+  .cal-head span{font-size:14px; font-weight:600;}
+  .grid7{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; text-align:center; }
+  .dow{ font-size:11px; color:var(--muted); padding-bottom:4px; }
+  .day{
+    aspect-ratio:1; display:flex; align-items:center; justify-content:center;
+    border-radius:7px; font-size:14px; cursor:pointer; border:1px solid transparent; position:relative;
+  }
+  @media (min-width: 720px){
+    .day{ font-size:16px; }
+    .room-row{ padding:12px 8px; }
+    input[type=text], input[type=tel], input[type=number]{ padding:11px 14px; }
+  }
+  .day.empty{cursor:default;}
+  .day.today{border-color:var(--teal);}
+  .day.booked{background:var(--red-light); color:var(--red);}
+  .day.selected{background:var(--teal); color:#fff;}
+  .day.past{color:#c9c6b8; cursor:not-allowed;}
+  .legend{ display:flex; gap:14px; font-size:12px; color:var(--muted); margin-top:10px; }
+  .dot{width:8px; height:8px; border-radius:2px; display:inline-block; margin-right:4px;}
+  .status{ padding:12px 14px; border-radius:8px; font-size:15px; font-weight:500; margin-bottom:14px; }
+  .status.available{background:var(--teal-light); color:var(--teal-dark);}
+  .status.unavailable{background:var(--red-light); color:var(--red);}
+  .status.pick{background:var(--amber-light); color:var(--amber);}
+  button.book{
+    width:100%; padding:13px; border:none; border-radius:8px; background:var(--teal);
+    color:#fff; font-size:16px; font-weight:600; cursor:pointer;
+  }
+  button.book:disabled{background:#c9c6b8; cursor:not-allowed;}
+  .booklist{font-size:14px;}
+  .booklist .row{ display:flex; justify-content:space-between; padding:9px 0; border-bottom:1px solid var(--line); }
+  .booklist .row:last-child{border-bottom:none;}
+  .cancel{ color:var(--red); background:none; border:none; font-size:13px; cursor:pointer; text-decoration:underline; }
+  .empty-note{color:var(--muted); font-size:14px;}
+  .total-line{ font-size:14px; color:var(--muted); margin:8px 0 14px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Green Villa Oluvil</h1>
+  <p class="sub">Room booking · pick one or more rooms and a date to check availability and book.</p>
+
+  <div class="layout-grid">
+  <div class="col-left">
+
+  <div class="card">
+    <h2>Manage rooms</h2>
+    <div class="row-inline">
+      <div>
+        <span class="label">Room no</span>
+        <input type="text" id="newRoomNo" placeholder="e.g. 104">
+      </div>
+      <div>
+        <span class="label">Rate / night</span>
+        <input type="number" id="newRoomAmount" placeholder="0" min="0">
+      </div>
+      <button class="btn primary" id="addRoomBtn">Add</button>
+    </div>
+    <div class="error" id="roomFormError"></div>
+    <div id="roomsManageList" style="margin-top:10px;"></div>
+  </div>
+
+  <div class="card">
+    <h2>Select rooms</h2>
+    <div id="roomCheckboxList"></div>
+  </div>
+
+  <div class="card" style="margin-top:20px;">
+    <span class="label">Current bookings</span>
+    <div class="booklist" id="bookingList"></div>
+  </div>
+
+  </div>
+  <div class="col-right">
+
+  <div class="card">
+    <div class="cal-head">
+      <button id="prevMonth" aria-label="Previous month">‹</button>
+      <span id="monthLabel"></span>
+      <button id="nextMonth" aria-label="Next month">›</button>
+    </div>
+    <div class="grid7" id="dowRow"></div>
+    <div class="grid7" id="calGrid"></div>
+    <div class="legend">
+      <span><span class="dot" style="background:var(--red-light); border:1px solid var(--red)"></span>Booked</span>
+      <span><span class="dot" style="background:var(--teal)"></span>Selected</span>
+    </div>
+  </div>
+
+  <div id="statusBox"></div>
+
+  <div class="card" id="detailsCard" style="display:none;">
+    <span class="label">Guest name</span>
+    <input type="text" id="guestName" placeholder="Full name">
+    <div style="height:10px;"></div>
+    <span class="label">Phone number</span>
+    <input type="tel" id="guestPhone" placeholder="10-digit number">
+    <div style="height:10px;"></div>
+    <span class="label">Advance amount</span>
+    <input type="number" id="guestAdvance" placeholder="0" min="0">
+    <div class="total-line" id="totalLine"></div>
+    <div id="formError" class="error"></div>
+  </div>
+
+  <button class="book" id="bookBtn" disabled>Select rooms and a date</button>
+
+  </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://lsjsdklljnxpshiteihb.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxzanNka2xsam54cHNoaXRlaWhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk2MTgzMjMsImV4cCI6MjEwNTE5NDMyM30.3XKTjbAC6GHWP-fAOXN5XGkvQpjKic5oi8FSSx8tRN8';
+
+let ROOMS = []; // [{id, room, amount}]
+let selectedRooms = new Set();
+let bookings = {}; // key "room|date" -> {name, phone, advance, amount}
+let selectedDate = null;
+let viewYear, viewMonth;
+
+const today = new Date();
+today.setHours(0,0,0,0);
+viewYear = today.getFullYear();
+viewMonth = today.getMonth();
+
+function key(room, dateStr){ return room + "|" + dateStr; }
+function fmt(y,m,d){ return y + "-" + String(m+1).padStart(2,'0') + "-" + String(d).padStart(2,'0'); }
+
+function sbHeaders(extra){
+  return Object.assign({ apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }, extra || {});
+}
+
+async function apiGet(table){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=*`, { headers: sbHeaders() });
+  if(!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
+  return res.json();
+}
+async function apiPost(table, body){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
+    method:'POST',
+    headers: sbHeaders({ 'Content-Type':'application/json', Prefer:'return=representation' }),
+    body: JSON.stringify(body)
+  });
+  if(!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
+  return res.json();
+}
+async function apiPatch(table, id, body){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {
+    method:'PATCH',
+    headers: sbHeaders({ 'Content-Type':'application/json', Prefer:'return=minimal' }),
+    body: JSON.stringify(body)
+  });
+  if(!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
+}
+async function apiDeleteById(table, id){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, { method:'DELETE', headers: sbHeaders() });
+  if(!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
+}
+async function apiDeleteBooking(room, date){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/bookings?room=eq.${encodeURIComponent(room)}&date=eq.${encodeURIComponent(date)}`, {
+    method:'DELETE', headers: sbHeaders()
+  });
+  if(!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
+}
+
+async function loadRooms(){
+  try{
+    const rows = await apiGet('rooms');
+    ROOMS = rows.sort((a,b)=> a.room.localeCompare(b.room, undefined, {numeric:true}));
+  } catch(e){
+    document.getElementById('roomFormError').textContent = "Couldn't load rooms: " + e.message;
+    ROOMS = [];
+  }
+  if(selectedRooms.size === 0 && ROOMS.length){
+    selectedRooms.add(ROOMS[0].room);
+  }
+  // drop selections for rooms that no longer exist
+  selectedRooms = new Set([...selectedRooms].filter(r => ROOMS.some(x=>x.room===r)));
+}
+
+async function loadBookings(){
+  try{
+    const rows = await apiGet('bookings');
+    bookings = {};
+    rows.forEach(row=>{
+      bookings[key(row.room, row.date)] = { name: row.name, phone: row.phone, advance: row.advance, amount: row.amount };
+    });
+  } catch(e){
+    bookings = {};
+    document.getElementById('bookingList').innerHTML = '<p class="empty-note" style="color:var(--red);">Couldn\'t reach the database: ' + e.message + '</p>';
+  }
+}
+
+function renderRoomsManage(){
+  const list = document.getElementById('roomsManageList');
+  list.innerHTML = "";
+  if(ROOMS.length === 0){
+    list.innerHTML = '<p class="empty-note">No rooms yet — add one above.</p>';
+    return;
+  }
+  ROOMS.forEach(r=>{
+    const row = document.createElement('div');
+    row.className = "room-row";
+    row.innerHTML = `
+      <div class="row-inline" style="flex:1;">
+        <div><input type="text" value="${r.room}" data-field="room" style="font-size:14px; padding:6px 8px;"></div>
+        <div><input type="number" value="${r.amount}" data-field="amount" min="0" style="font-size:14px; padding:6px 8px;"></div>
+      </div>
+    `;
+    const btnWrap = document.createElement('div');
+    btnWrap.style.display = "flex";
+    btnWrap.style.gap = "6px";
+
+    const saveBtn = document.createElement('button');
+    saveBtn.className = "btn";
+    saveBtn.textContent = "Save";
+    saveBtn.addEventListener('click', async ()=>{
+      const roomInput = row.querySelector('[data-field="room"]');
+      const amountInput = row.querySelector('[data-field="amount"]');
+      const newRoom = roomInput.value.trim();
+      const newAmount = Number(amountInput.value) || 0;
+      const errEl = document.getElementById('roomFormError');
+      if(!newRoom){ errEl.textContent = "Room number can't be empty."; return; }
+      try{
+        await apiPatch('rooms', r.id, { room: newRoom, amount: newAmount });
+        errEl.textContent = "";
+        await loadRooms();
+        renderAll();
+      } catch(e){
+        errEl.textContent = "Couldn't update room: " + e.message;
+      }
+    });
+
+    const delBtn = document.createElement('button');
+    delBtn.className = "btn danger";
+    delBtn.textContent = "Delete";
+    delBtn.addEventListener('click', async ()=>{
+      if(!confirm(`Delete room ${r.room}? This does not delete existing bookings for it.`)) return;
+      try{
+        await apiDeleteById('rooms', r.id);
+        await loadRooms();
+        renderAll();
+      } catch(e){
+        document.getElementById('roomFormError').textContent = "Couldn't delete room: " + e.message;
+      }
+    });
+
+    btnWrap.appendChild(saveBtn);
+    btnWrap.appendChild(delBtn);
+    row.appendChild(btnWrap);
+    list.appendChild(row);
+  });
+}
+
+document.getElementById('addRoomBtn').addEventListener('click', async ()=>{
+  const roomEl = document.getElementById('newRoomNo');
+  const amountEl = document.getElementById('newRoomAmount');
+  const errEl = document.getElementById('roomFormError');
+  const room = roomEl.value.trim();
+  const amount = Number(amountEl.value) || 0;
+  if(!room){ errEl.textContent = "Enter a room number."; return; }
+  try{
+    await apiPost('rooms', [{ room, amount }]);
+    errEl.textContent = "";
+    roomEl.value = ""; amountEl.value = "";
+    await loadRooms();
+    renderAll();
+  } catch(e){
+    errEl.textContent = "Couldn't add room: " + e.message;
+  }
+});
+
+function renderRoomCheckboxes(){
+  const list = document.getElementById('roomCheckboxList');
+  list.innerHTML = "";
+  if(ROOMS.length === 0){
+    list.innerHTML = '<p class="empty-note">Add a room above to start booking.</p>';
+    return;
+  }
+  ROOMS.forEach(r=>{
+    const row = document.createElement('div');
+    const isBooked = selectedDate && !!bookings[key(r.room, selectedDate)];
+    row.className = "room-row" + (isBooked ? " booked" : "");
+    const id = "room-cb-" + r.room;
+    row.innerHTML = `
+      <div class="room-check">
+        <input type="checkbox" id="${id}" ${selectedRooms.has(r.room) ? 'checked' : ''}>
+        <label for="${id}">Room ${r.room}${isBooked ? ' — booked' : ''}</label>
+      </div>
+      <span class="rate">₹${r.amount}/night</span>
+    `;
+    row.querySelector('input').addEventListener('change', (e)=>{
+      if(e.target.checked) selectedRooms.add(r.room);
+      else selectedRooms.delete(r.room);
+      renderCalendar();
+      renderStatus();
+    });
+    list.appendChild(row);
+  });
+}
+
+document.getElementById('prevMonth').addEventListener('click', ()=>{
+  viewMonth--; if(viewMonth<0){viewMonth=11; viewYear--;}
+  renderCalendar();
+});
+document.getElementById('nextMonth').addEventListener('click', ()=>{
+  viewMonth++; if(viewMonth>11){viewMonth=0; viewYear++;}
+  renderCalendar();
+});
+
+function renderCalendar(){
+  const dowRow = document.getElementById('dowRow');
+  dowRow.innerHTML = "";
+  ["S","M","T","W","T","F","S"].forEach(d=>{
+    const el = document.createElement('div'); el.className = "dow"; el.textContent = d;
+    dowRow.appendChild(el);
+  });
+
+  const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  document.getElementById('monthLabel').textContent = monthNames[viewMonth] + " " + viewYear;
+
+  const grid = document.getElementById('calGrid');
+  grid.innerHTML = "";
+  const firstDow = new Date(viewYear, viewMonth, 1).getDay();
+  const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
+
+  for(let i=0;i<firstDow;i++){
+    const el = document.createElement('div'); el.className = "day empty";
+    grid.appendChild(el);
+  }
+
+  for(let d=1; d<=daysInMonth; d++){
+    const el = document.createElement('div');
+    const dateObj = new Date(viewYear, viewMonth, d);
+    const dateStr = fmt(viewYear, viewMonth, d);
+    const isPast = dateObj < today;
+    const isToday = dateObj.getTime() === today.getTime();
+    const isBooked = [...selectedRooms].some(r => !!bookings[key(r, dateStr)]);
+    const isSelected = selectedDate === dateStr;
+
+    el.className = "day";
+    if(isPast) el.className += " past";
+    if(isToday) el.className += " today";
+    if(isBooked && !isPast) el.className += " booked";
+    if(isSelected) el.className += " selected";
+    el.textContent = d;
+
+    if(!isPast){
+      el.addEventListener('click', ()=>{
+        selectedDate = dateStr;
+        renderCalendar();
+        renderStatus();
+        renderRoomCheckboxes();
+      });
+    }
+    grid.appendChild(el);
+  }
+}
+
+function renderStatus(){
+  const statusBox = document.getElementById('statusBox');
+  const bookBtn = document.getElementById('bookBtn');
+  const detailsCard = document.getElementById('detailsCard');
+  const totalLine = document.getElementById('totalLine');
+
+  if(selectedRooms.size === 0){
+    statusBox.innerHTML = '<div class="status pick">Select at least one room.</div>';
+    bookBtn.disabled = true; bookBtn.textContent = "Select rooms and a date";
+    detailsCard.style.display = "none";
+    return;
+  }
+  if(!selectedDate){
+    statusBox.innerHTML = "";
+    bookBtn.disabled = true; bookBtn.textContent = "Select a date";
+    detailsCard.style.display = "none";
+    return;
+  }
+
+  const niceDate = new Date(selectedDate + "T00:00:00").toLocaleDateString(undefined,{weekday:'short', month:'short', day:'numeric'});
+  const roomList = [...selectedRooms];
+  const unavailable = roomList.filter(r => !!bookings[key(r, selectedDate)]);
+
+  if(unavailable.length > 0){
+    statusBox.innerHTML = `<div class="status unavailable">Room${unavailable.length>1?'s':''} ${unavailable.join(', ')} not available on ${niceDate}.</div>`;
+    bookBtn.disabled = true; bookBtn.textContent = "Rooms not available";
+    detailsCard.style.display = "none";
+  } else {
+    const total = roomList.reduce((sum, r)=>{
+      const room = ROOMS.find(x=>x.room===r);
+      return sum + (room ? Number(room.amount) : 0);
+    }, 0);
+    statusBox.innerHTML = `<div class="status available">Room${roomList.length>1?'s':''} ${roomList.join(', ')} available on ${niceDate}.</div>`;
+    totalLine.textContent = `Total rate for selected rooms: ₹${total}/night`;
+    bookBtn.disabled = false;
+    bookBtn.textContent = "Book " + roomList.length + " room" + (roomList.length>1?'s':'');
+    detailsCard.style.display = "block";
+  }
+}
+
+document.getElementById('bookBtn').addEventListener('click', async ()=>{
+  if(!selectedDate || selectedRooms.size === 0) return;
+  const nameEl = document.getElementById('guestName');
+  const phoneEl = document.getElementById('guestPhone');
+  const advanceEl = document.getElementById('guestAdvance');
+  const errEl = document.getElementById('formError');
+
+  const name = nameEl.value.trim();
+  const phone = phoneEl.value.trim();
+  const advance = advanceEl.value.trim();
+
+  if(!name){ errEl.textContent = "Enter the guest's name."; return; }
+  if(!phone || !/^\d{7,15}$/.test(phone)){ errEl.textContent = "Enter a valid phone number."; return; }
+  if(advance !== "" && Number(advance) < 0){ errEl.textContent = "Advance can't be negative."; return; }
+  errEl.textContent = "";
+  const advanceNum = advance === "" ? 0 : Number(advance);
+
+  const roomList = [...selectedRooms];
+  try{
+    for(const r of roomList){
+      const roomInfo = ROOMS.find(x=>x.room===r);
+      const amount = roomInfo ? Number(roomInfo.amount) : 0;
+      await apiPost('bookings', [{ room:r, date:selectedDate, name, phone, advance:advanceNum, amount }]);
+      bookings[key(r, selectedDate)] = { name, phone, advance:advanceNum, amount };
+    }
+  } catch(e){
+    errEl.textContent = "Couldn't save to the database: " + e.message;
+    return;
+  }
+
+  nameEl.value = ""; phoneEl.value = ""; advanceEl.value = "";
+  renderCalendar(); renderStatus(); renderBookingList();
+});
+
+function renderBookingList(){
+  const list = document.getElementById('bookingList');
+  const entries = Object.keys(bookings).sort();
+  if(entries.length === 0){
+    list.innerHTML = '<p class="empty-note">No bookings yet.</p>';
+    return;
+  }
+  list.innerHTML = "";
+  entries.forEach(k=>{
+    const [room, date] = k.split("|");
+    const info = bookings[k];
+    const nice = new Date(date + "T00:00:00").toLocaleDateString(undefined,{month:'short', day:'numeric', year:'numeric'});
+    const row = document.createElement('div');
+    row.className = "row";
+    row.innerHTML = `<div>
+        <div style="font-weight:500;">Room ${room} — ${nice}</div>
+        <div style="color:var(--muted); font-size:12px; margin-top:2px;">
+          ${info.name || ""}${info.phone ? " · " + info.phone : ""}${info.amount ? " · rate ₹" + info.amount : ""}${info.advance ? " · advance ₹" + info.advance : ""}
+        </div>
+      </div>`;
+    const btn = document.createElement('button');
+    btn.className = "cancel";
+    btn.textContent = "Cancel";
+    btn.addEventListener('click', async ()=>{
+      try{
+        await apiDeleteBooking(room, date);
+      } catch(e){
+        alert("Couldn't cancel: " + e.message);
+        return;
+      }
+      delete bookings[k];
+      renderCalendar(); renderStatus(); renderBookingList();
+    });
+    row.appendChild(btn);
+    list.appendChild(row);
+  });
+}
+
+function renderAll(){
+  renderRoomsManage();
+  renderRoomCheckboxes();
+  renderCalendar();
+  renderStatus();
+  renderBookingList();
+}
+
+async function init(){
+  document.getElementById('bookingList').innerHTML = '<p class="empty-note">Loading…</p>';
+  await loadRooms();
+  await loadBookings();
+  renderAll();
+}
+init();
+</script>
+</body>
+</html>
