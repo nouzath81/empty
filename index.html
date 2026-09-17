@@ -39,36 +39,36 @@
       align-items:start;
     }
     .col-right{ position:sticky; top:24px; }
-    h1{ font-size:28px; }
-    .sub{ font-size:16px; }
+    h1{ font-size:56px; }
+    .sub{ font-size:32px; }
   }
   @media (min-width: 1080px){
     .wrap{ max-width:1080px; }
   }
-  h1{ font-size:24px; font-weight:700; margin:0; letter-spacing:-0.01em; color:#fff; }
-  h2{ font-size:18px; font-weight:600; margin:0 0 10px; }
+  h1{ font-size:48px; font-weight:700; margin:0; letter-spacing:-0.01em; color:#fff; }
+  h2{ font-size:36px; font-weight:600; margin:0 0 10px; }
   .header-banner{
     background: linear-gradient(135deg, var(--teal) 0%, #147a5f 45%, var(--leaf) 100%);
     border-radius:14px; padding:20px 18px; margin-bottom:18px;
     box-shadow: 0 4px 14px rgba(15,110,86,0.25);
   }
-  .sub{ font-size:15px; color:rgba(255,255,255,0.88); margin:6px 0 0; }
+  .sub{ font-size:30px; color:rgba(255,255,255,0.88); margin:6px 0 0; }
   .card{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:14px; border-top:4px solid var(--line); }
   .card.accent-amber{ border-top-color:var(--amber); }
   .card.accent-sky{ border-top-color:var(--sky); }
   .card.accent-coral{ border-top-color:var(--coral); }
   .card.accent-teal{ border-top-color:var(--teal); }
-  .label{ font-size:14px; color:var(--muted); margin-bottom:6px; display:block; }
+  .label{ font-size:28px; color:var(--muted); margin-bottom:6px; display:block; }
   select, input{
     width:100%; padding:12px 12px; border:1px solid var(--line); border-radius:8px;
-    font-size:17px; background:var(--card); color:var(--ink); font-family:inherit;
+    font-size:34px; background:var(--card); color:var(--ink); font-family:inherit;
   }
-  .error{ color:var(--red); font-size:14px; margin-top:8px; }
+  .error{ color:var(--red); font-size:28px; margin-top:8px; }
   .row-inline{ display:flex; gap:8px; align-items:flex-end; }
   .row-inline > div{ flex:1; }
   .btn{
     padding:11px 13px; border:1px solid var(--line); border-radius:8px;
-    background:var(--card); color:var(--ink); font-size:16px; cursor:pointer; white-space:nowrap; font-weight:500;
+    background:var(--card); color:var(--ink); font-size:32px; cursor:pointer; white-space:nowrap; font-weight:500;
   }
   .btn.primary{ background:var(--teal); color:#fff; border:none; }
   .btn.save{ background:var(--sky-light); color:var(--sky); border:1px solid var(--sky); }
@@ -83,22 +83,22 @@
   .room-row.booked .rate{ color:var(--red); background:var(--red-light); }
   .room-check{ display:flex; align-items:center; gap:10px; flex:1; }
   .room-check input[type=checkbox]{ width:20px; height:20px; flex:none; accent-color:var(--teal); }
-  .room-check label{ font-size:17px; cursor:pointer; flex:1; }
-  .rate{ color:var(--leaf); font-size:14px; font-weight:600; background:var(--teal-light); padding:4px 10px; border-radius:999px; white-space:nowrap; }
+  .room-check label{ font-size:34px; cursor:pointer; flex:1; }
+  .rate{ color:var(--leaf); font-size:28px; font-weight:600; background:var(--teal-light); padding:4px 10px; border-radius:999px; white-space:nowrap; }
   .cal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
   .cal-head button{
     border:1px solid var(--line); background:var(--card); border-radius:6px;
-    width:34px; height:34px; font-size:17px; cursor:pointer; color:var(--ink);
+    width:34px; height:34px; font-size:34px; cursor:pointer; color:var(--ink);
   }
-  .cal-head span{font-size:16px; font-weight:600;}
+  .cal-head span{font-size:32px; font-weight:600;}
   .grid7{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; text-align:center; }
-  .dow{ font-size:12px; color:var(--muted); padding-bottom:4px; }
+  .dow{ font-size:24px; color:var(--muted); padding-bottom:4px; }
   .day{
     aspect-ratio:1; display:flex; align-items:center; justify-content:center;
-    border-radius:7px; font-size:16px; cursor:pointer; border:1px solid transparent; position:relative;
+    border-radius:7px; font-size:32px; cursor:pointer; border:1px solid transparent; position:relative;
   }
   @media (min-width: 720px){
-    .day{ font-size:18px; }
+    .day{ font-size:36px; }
     .room-row{ padding:13px 8px; }
     input[type=text], input[type=tel], input[type=number]{ padding:12px 14px; }
   }
@@ -107,23 +107,23 @@
   .day.booked{background:var(--red-light); color:var(--red);}
   .day.selected{background:var(--teal); color:#fff;}
   .day.past{color:#c9c6b8; cursor:not-allowed;}
-  .legend{ display:flex; gap:14px; font-size:13px; color:var(--muted); margin-top:10px; }
+  .legend{ display:flex; gap:14px; font-size:26px; color:var(--muted); margin-top:10px; }
   .dot{width:8px; height:8px; border-radius:2px; display:inline-block; margin-right:4px;}
-  .status{ padding:13px 14px; border-radius:8px; font-size:16px; font-weight:500; margin-bottom:14px; }
+  .status{ padding:13px 14px; border-radius:8px; font-size:32px; font-weight:500; margin-bottom:14px; }
   .status.available{background:var(--teal-light); color:var(--teal-dark);}
   .status.unavailable{background:var(--red-light); color:var(--red);}
   .status.pick{background:var(--amber-light); color:var(--amber);}
   button.book{
     width:100%; padding:14px; border:none; border-radius:8px; background:var(--teal);
-    color:#fff; font-size:18px; font-weight:600; cursor:pointer;
+    color:#fff; font-size:36px; font-weight:600; cursor:pointer;
   }
   button.book:disabled{background:#c9c6b8; cursor:not-allowed;}
-  .booklist{font-size:15px;}
+  .booklist{font-size:30px;}
   .booklist .row{ display:flex; justify-content:space-between; padding:10px 10px; border-bottom:1px solid var(--line); border-left:4px solid var(--teal); border-radius:6px; margin-bottom:6px; background:var(--teal-light); }
   .booklist .row:last-child{border-bottom:none;}
-  .cancel{ color:var(--red); background:none; border:none; font-size:14px; cursor:pointer; text-decoration:underline; }
-  .empty-note{color:var(--muted); font-size:15px;}
-  .total-line{ font-size:15px; color:var(--muted); margin:8px 0 14px; }
+  .cancel{ color:var(--red); background:none; border:none; font-size:28px; cursor:pointer; text-decoration:underline; }
+  .empty-note{color:var(--muted); font-size:30px;}
+  .total-line{ font-size:30px; color:var(--muted); margin:8px 0 14px; }
 </style>
 </head>
 <body>
@@ -131,29 +131,13 @@
   <div class="header-banner">
     <h1>Green Villa Oluvil</h1>
     <p class="sub">Room booking · pick one or more rooms and a date to check availability and book.</p>
+    <p class="sub" style="margin-top:10px;"><a href="admin.html" style="color:#fff;">Manage rooms →</a></p>
   </div>
 
   <div class="layout-grid">
   <div class="col-left">
 
-  <div class="card accent-amber">
-    <h2>Manage rooms</h2>
-    <div class="row-inline">
-      <div>
-        <span class="label">Room no</span>
-        <input type="text" id="newRoomNo" placeholder="e.g. 104">
-      </div>
-      <div>
-        <span class="label">Rate / night</span>
-        <input type="number" id="newRoomAmount" placeholder="0" min="0">
-      </div>
-      <button class="btn primary" id="addRoomBtn">Add</button>
-    </div>
-    <div class="error" id="roomFormError"></div>
-    <div id="roomsManageList" style="margin-top:10px;"></div>
-  </div>
-
-  <div class="card accent-sky">
+<div class="card accent-sky">
     <h2>Select rooms</h2>
     <div id="roomCheckboxList"></div>
   </div>
@@ -283,85 +267,6 @@ async function loadBookings(){
     document.getElementById('bookingList').innerHTML = '<p class="empty-note" style="color:var(--red);">Couldn\'t reach the database: ' + e.message + '</p>';
   }
 }
-
-function renderRoomsManage(){
-  const list = document.getElementById('roomsManageList');
-  list.innerHTML = "";
-  if(ROOMS.length === 0){
-    list.innerHTML = '<p class="empty-note">No rooms yet — add one above.</p>';
-    return;
-  }
-  ROOMS.forEach(r=>{
-    const row = document.createElement('div');
-    row.className = "room-row";
-    row.innerHTML = `
-      <div class="row-inline" style="flex:1;">
-        <div><input type="text" value="${r.room}" data-field="room" style="font-size:14px; padding:6px 8px;"></div>
-        <div><input type="number" value="${r.amount}" data-field="amount" min="0" style="font-size:14px; padding:6px 8px;"></div>
-      </div>
-    `;
-    const btnWrap = document.createElement('div');
-    btnWrap.style.display = "flex";
-    btnWrap.style.gap = "6px";
-
-    const saveBtn = document.createElement('button');
-    saveBtn.className = "btn save";
-    saveBtn.textContent = "Save";
-    saveBtn.addEventListener('click', async ()=>{
-      const roomInput = row.querySelector('[data-field="room"]');
-      const amountInput = row.querySelector('[data-field="amount"]');
-      const newRoom = roomInput.value.trim();
-      const newAmount = Number(amountInput.value) || 0;
-      const errEl = document.getElementById('roomFormError');
-      if(!newRoom){ errEl.textContent = "Room number can't be empty."; return; }
-      try{
-        await apiPatch('rooms', r.id, { room: newRoom, amount: newAmount });
-        errEl.textContent = "";
-        await loadRooms();
-        renderAll();
-      } catch(e){
-        errEl.textContent = "Couldn't update room: " + e.message;
-      }
-    });
-
-    const delBtn = document.createElement('button');
-    delBtn.className = "btn danger";
-    delBtn.textContent = "Delete";
-    delBtn.addEventListener('click', async ()=>{
-      if(!confirm(`Delete room ${r.room}? This does not delete existing bookings for it.`)) return;
-      try{
-        await apiDeleteById('rooms', r.id);
-        await loadRooms();
-        renderAll();
-      } catch(e){
-        document.getElementById('roomFormError').textContent = "Couldn't delete room: " + e.message;
-      }
-    });
-
-    btnWrap.appendChild(saveBtn);
-    btnWrap.appendChild(delBtn);
-    row.appendChild(btnWrap);
-    list.appendChild(row);
-  });
-}
-
-document.getElementById('addRoomBtn').addEventListener('click', async ()=>{
-  const roomEl = document.getElementById('newRoomNo');
-  const amountEl = document.getElementById('newRoomAmount');
-  const errEl = document.getElementById('roomFormError');
-  const room = roomEl.value.trim();
-  const amount = Number(amountEl.value) || 0;
-  if(!room){ errEl.textContent = "Enter a room number."; return; }
-  try{
-    await apiPost('rooms', [{ room, amount }]);
-    errEl.textContent = "";
-    roomEl.value = ""; amountEl.value = "";
-    await loadRooms();
-    renderAll();
-  } catch(e){
-    errEl.textContent = "Couldn't add room: " + e.message;
-  }
-});
 
 function renderRoomCheckboxes(){
   const list = document.getElementById('roomCheckboxList');
@@ -540,7 +445,7 @@ function renderBookingList(){
     row.className = "row";
     row.innerHTML = `<div>
         <div style="font-weight:500;">Room ${room} — ${nice}</div>
-        <div style="color:var(--muted); font-size:12px; margin-top:2px;">
+        <div style="color:var(--muted); font-size:24px; margin-top:2px;">
           ${info.name || ""}${info.phone ? " · " + info.phone : ""}${info.amount ? " · rate ₹" + info.amount : ""}${info.advance ? " · advance ₹" + info.advance : ""}
         </div>
       </div>`;
@@ -563,7 +468,6 @@ function renderBookingList(){
 }
 
 function renderAll(){
-  renderRoomsManage();
   renderRoomCheckboxes();
   renderCalendar();
   renderStatus();
