@@ -144,6 +144,7 @@
 
   <div class="card accent-teal" style="margin-top:20px;">
     <span class="label">Current bookings</span>
+    <input type="text" id="bookingSearch" placeholder="Search by guest name or phone number" style="margin-top:8px; margin-bottom:4px;">
     <div class="booklist" id="bookingList"></div>
   </div>
 
@@ -429,11 +430,26 @@ document.getElementById('bookBtn').addEventListener('click', async ()=>{
   renderCalendar(); renderStatus(); renderBookingList();
 });
 
+let bookingSearchQuery = "";
+
 function renderBookingList(){
   const list = document.getElementById('bookingList');
-  const entries = Object.keys(bookings).sort();
-  if(entries.length === 0){
+  const allEntries = Object.keys(bookings).sort();
+  if(allEntries.length === 0){
     list.innerHTML = '<p class="empty-note">No bookings yet.</p>';
+    return;
+  }
+  const q = bookingSearchQuery.trim().toLowerCase();
+  const entries = q
+    ? allEntries.filter(k=>{
+        const info = bookings[k];
+        const name = (info.name || "").toLowerCase();
+        const phone = (info.phone || "").toLowerCase();
+        return name.includes(q) || phone.includes(q);
+      })
+    : allEntries;
+  if(entries.length === 0){
+    list.innerHTML = '<p class="empty-note">No bookings match your search.</p>';
     return;
   }
   list.innerHTML = "";
@@ -473,6 +489,11 @@ function renderAll(){
   renderStatus();
   renderBookingList();
 }
+
+document.getElementById('bookingSearch').addEventListener('input', (e)=>{
+  bookingSearchQuery = e.target.value;
+  renderBookingList();
+});
 
 async function init(){
   document.getElementById('bookingList').innerHTML = '<p class="empty-note">Loading…</p>';
