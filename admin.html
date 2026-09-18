@@ -3,29 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <title>Green Villa Oluvil — Manage Rooms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#0b3d20;
-    --paper:#fbe4ec;
+    --ink:#1f2a44;
+    --paper:#eef1f8;
     --card:#ffffff;
-    --line:#dcd8cc;
-    --teal:#6b3f24;
-    --teal-dark:#3b2213;
-    --teal-light:#f0e2d6;
-    --leaf:#8a5a34;
-    --sky:#2f8fd1;
-    --sky-light:#e5f1fb;
-    --coral:#e2643f;
-    --coral-light:#fce6dd;
-    --amber:#ba7517;
-    --amber-light:#faeeda;
-    --red:#a32d2d;
-    --red-light:#fcebeb;
-    --muted:#6b6a63;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --line:#e2e6f0;
+    --teal:#0f766e;
+    --teal-dark:#0b4f4a;
+    --teal-light:#e3f6f4;
+    --leaf:#6d28d9;
+    --sky:#2563eb;
+    --sky-light:#e9f0fe;
+    --coral:#ea580c;
+    --coral-light:#fdece1;
+    --amber:#b45309;
+    --amber-light:#fdf1de;
+    --red:#b91c1c;
+    --red-light:#fdeaea;
+    --muted:#667085;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   }
-  *{box-sizing:border-box; font-weight:bold;}
-  body{ margin:0; background:var(--paper); color:var(--ink); padding:20px 14px 40px; }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--paper); color:var(--ink); padding:20px 14px 40px; font-weight:500; }
   .wrap{max-width:480px; margin:0 auto;}
   .layout-grid{ display:block; }
   .col-left, .col-right{ display:block; }
@@ -45,20 +47,20 @@
   @media (min-width: 1080px){
     .wrap{ max-width:1080px; }
   }
-  h1{ font-size:48px; font-weight:700; margin:0; letter-spacing:-0.01em; color:#fff; }
-  h2{ font-size:36px; font-weight:600; margin:0 0 10px; }
+  h1{ font-size:48px; font-weight:700; margin:0; letter-spacing:-0.01em; color:#fff; font-family:'Poppins',sans-serif; }
+  h2{ font-size:36px; font-weight:600; margin:0 0 10px; font-family:'Poppins',sans-serif; color:var(--teal-dark); }
   .header-banner{
-    background: linear-gradient(135deg, var(--teal) 0%, #4a2c18 45%, var(--leaf) 100%);
-    border-radius:14px; padding:20px 18px; margin-bottom:18px;
-    box-shadow: 0 4px 14px rgba(90,50,20,0.25);
+    background: linear-gradient(135deg, var(--teal) 0%, #4338ca 55%, var(--leaf) 100%);
+    border-radius:18px; padding:24px 20px; margin-bottom:20px;
+    box-shadow: 0 8px 24px rgba(67,56,202,0.25);
   }
   .sub{ font-size:30px; color:rgba(255,255,255,0.88); margin:6px 0 0; }
-  .card{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; margin-bottom:14px; border-top:4px solid var(--line); }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; margin-bottom:16px; border-top:4px solid var(--line); box-shadow:0 2px 10px rgba(31,42,68,0.06); }
   .card.accent-amber{ border-top-color:var(--amber); }
   .card.accent-sky{ border-top-color:var(--sky); }
   .card.accent-coral{ border-top-color:var(--coral); }
   .card.accent-teal{ border-top-color:var(--teal); }
-  .label{ font-size:28px; color:var(--muted); margin-bottom:6px; display:block; }
+  .label{ font-size:28px; color:var(--muted); margin-bottom:6px; display:block; font-weight:600; }
   select, input{
     width:100%; padding:12px 12px; border:1px solid var(--line); border-radius:8px;
     font-size:34px; background:var(--card); color:var(--ink); font-family:inherit;
@@ -67,10 +69,10 @@
   .row-inline{ display:flex; gap:8px; align-items:flex-end; }
   .row-inline > div{ flex:1; }
   .btn{
-    padding:11px 13px; border:1px solid var(--line); border-radius:8px;
-    background:var(--card); color:var(--ink); font-size:32px; cursor:pointer; white-space:nowrap; font-weight:500;
+    padding:11px 15px; border:1px solid var(--line); border-radius:10px;
+    background:var(--card); color:var(--ink); font-size:32px; cursor:pointer; white-space:nowrap; font-weight:600;
   }
-  .btn.primary{ background:var(--teal); color:#fff; border:none; }
+  .btn.primary{ background:linear-gradient(135deg, var(--teal), var(--sky)); color:#fff; border:none; }
   .btn.save{ background:var(--sky-light); color:var(--sky); border:1px solid var(--sky); }
   .btn.danger{ background:var(--red-light); color:var(--red); border:1px solid var(--red); }
   .room-row{
@@ -83,8 +85,8 @@
   .room-row.booked .rate{ color:var(--red); background:var(--red-light); }
   .room-check{ display:flex; align-items:center; gap:10px; flex:1; }
   .room-check input[type=checkbox]{ width:20px; height:20px; flex:none; accent-color:var(--teal); }
-  .room-check label{ font-size:34px; cursor:pointer; flex:1; color:#000; }
-  .rate{ color:#000; font-size:28px; font-weight:600; background:var(--teal-light); padding:4px 10px; border-radius:999px; white-space:nowrap; }
+  .room-check label{ font-size:34px; cursor:pointer; flex:1; color:var(--ink); font-weight:600; }
+  .rate{ color:var(--teal-dark); font-size:28px; font-weight:700; background:var(--teal-light); padding:4px 12px; border-radius:999px; white-space:nowrap; }
   .cal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
   .cal-head button{
     border:1px solid var(--line); background:var(--card); border-radius:6px;
@@ -105,7 +107,7 @@
   .day.empty{cursor:default;}
   .day.today{border-color:var(--sky); background:var(--sky-light); color:var(--sky); font-weight:700;}
   .day.booked{background:var(--red-light); color:var(--red);}
-  .day.selected{background:var(--teal); color:#fff;}
+  .day.selected{background:linear-gradient(135deg, var(--teal), var(--sky)); color:#fff; font-weight:700;}
   .day.past{color:#c9c6b8; cursor:not-allowed;}
   .legend{ display:flex; gap:14px; font-size:26px; color:var(--muted); margin-top:10px; }
   .dot{width:8px; height:8px; border-radius:2px; display:inline-block; margin-right:4px;}
@@ -114,8 +116,8 @@
   .status.unavailable{background:var(--red-light); color:var(--red);}
   .status.pick{background:var(--amber-light); color:var(--amber);}
   button.book{
-    width:100%; padding:14px; border:none; border-radius:8px; background:var(--teal);
-    color:#fff; font-size:36px; font-weight:600; cursor:pointer;
+    width:100%; padding:16px; border:none; border-radius:12px; background:linear-gradient(135deg, var(--teal), var(--leaf));
+    color:#fff; font-size:36px; font-weight:700; cursor:pointer; box-shadow:0 6px 16px rgba(15,118,110,0.3);
   }
   button.book:disabled{background:#c9c6b8; cursor:not-allowed;}
   .booklist{font-size:30px;}
