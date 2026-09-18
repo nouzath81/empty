@@ -113,6 +113,12 @@
   .date-room-link{ margin-top:14px; padding:10px 12px; background:var(--red-light); border:1px solid var(--red); border-radius:8px; font-size:26px; }
   .date-room-link .arrow-chip{ display:inline-flex; align-items:center; gap:4px; background:#fff; border:1px solid var(--red); color:var(--red); border-radius:999px; padding:3px 10px; margin:4px 4px 0 0; }
   .date-room-link .arrow-chip::before{ content:"→"; }
+  .avail-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:4px; }
+  @media (min-width: 720px){ .avail-grid{ grid-template-columns:repeat(3,1fr); } }
+  .avail-chip{ display:flex; align-items:center; justify-content:space-between; gap:6px; padding:8px 10px; border-radius:8px; font-size:26px; border:1px solid var(--line); }
+  .avail-chip.free{ background:var(--teal-light); border-color:var(--teal); color:var(--teal-dark); }
+  .avail-chip.taken{ background:var(--red-light); border-color:var(--red); color:var(--red); }
+  .avail-chip .avail-tag{ font-size:22px; font-weight:700; text-transform:uppercase; letter-spacing:0.02em; }
   .dot{width:8px; height:8px; border-radius:2px; display:inline-block; margin-right:4px;}
   .status{ padding:13px 14px; border-radius:8px; font-size:32px; font-weight:500; margin-bottom:14px; }
   .status.available{background:var(--teal-light); color:var(--teal-dark);}
@@ -169,6 +175,11 @@
       <span><span class="dot" style="background:var(--teal)"></span>Selected</span>
     </div>
     <div id="bookedForDate"></div>
+  </div>
+
+  <div class="card accent-sky" id="availabilityCard" style="display:none;">
+    <h2 id="availabilityTitle">Room availability</h2>
+    <div id="availabilityGrid" class="avail-grid"></div>
   </div>
 
   <div id="statusBox"></div>
@@ -357,6 +368,7 @@ function renderCalendar(){
         renderStatus();
         renderRoomCheckboxes();
         renderBookedForDate();
+  renderAvailabilityGrid();
       });
     }
     grid.appendChild(el);
@@ -375,6 +387,23 @@ function renderBookedForDate(){
       <div>${niceDate} is booked for:</div>
       <div style="margin-top:4px;">${bookedRooms.map(r=>`<span class="arrow-chip">Room ${r}</span>`).join('')}</div>
     </div>`;
+}
+
+function renderAvailabilityGrid(){
+  const card = document.getElementById('availabilityCard');
+  const grid = document.getElementById('availabilityGrid');
+  const title = document.getElementById('availabilityTitle');
+  if(!selectedDate || ROOMS.length === 0){ card.style.display = "none"; return; }
+  const niceDate = new Date(selectedDate + "T00:00:00").toLocaleDateString(undefined,{weekday:'short', month:'short', day:'numeric'});
+  title.textContent = `Room availability — ${niceDate}`;
+  grid.innerHTML = ROOMS.map(r=>{
+    const isTaken = !!bookings[key(r.room, selectedDate)];
+    return `<div class="avail-chip ${isTaken ? 'taken' : 'free'}">
+        <span>Room ${r.room}</span>
+        <span class="avail-tag">${isTaken ? 'Booked' : 'Free'}</span>
+      </div>`;
+  }).join('');
+  card.style.display = "block";
 }
 
 function renderStatus(){
@@ -449,6 +478,7 @@ document.getElementById('bookBtn').addEventListener('click', async ()=>{
 
   nameEl.value = ""; phoneEl.value = ""; advanceEl.value = "";
   renderCalendar(); renderStatus(); renderBookingList(); renderBookedForDate();
+  renderAvailabilityGrid();
 });
 
 let bookingSearchQuery = "";
@@ -498,6 +528,7 @@ function renderBookingList(){
       }
       delete bookings[k];
       renderCalendar(); renderStatus(); renderBookingList(); renderBookedForDate();
+  renderAvailabilityGrid();
     });
     row.appendChild(btn);
     list.appendChild(row);
@@ -510,6 +541,7 @@ function renderAll(){
   renderStatus();
   renderBookingList();
   renderBookedForDate();
+  renderAvailabilityGrid();
 }
 
 document.getElementById('bookingSearch').addEventListener('input', (e)=>{
