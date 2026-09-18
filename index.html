@@ -200,13 +200,13 @@
   <div id="statusBox"></div>
 
   <div class="card" id="detailsCard" style="display:none;">
-    <span class="label">Guest name</span>
+    <span class="label" style="color:var(--sky);">Guest name</span>
     <input type="text" id="guestName" placeholder="Full name">
     <div style="height:10px;"></div>
-    <span class="label">Phone number</span>
+    <span class="label" style="color:var(--leaf);">Phone number</span>
     <input type="tel" id="guestPhone" placeholder="10-digit number">
     <div style="height:10px;"></div>
-    <span class="label">Advance amount</span>
+    <span class="label" style="color:var(--amber);">Advance amount</span>
     <input type="number" id="guestAdvance" placeholder="0" min="0">
     <div class="total-line" id="totalLine"></div>
     <div id="formError" class="error"></div>
@@ -398,9 +398,20 @@ function renderBookedForDate(){
     .filter(room => !!bookings[key(room, selectedDate)]);
   if(bookedRooms.length === 0){ box.innerHTML = ""; return; }
   const niceDate = new Date(selectedDate + "T00:00:00").toLocaleDateString(undefined,{weekday:'short', month:'short', day:'numeric'});
+  const details = bookedRooms.map(r=>{
+    const info = bookings[key(r, selectedDate)];
+    return `<div style="margin-top:8px; padding-top:8px; border-top:1px dashed var(--red);">
+        <span class="arrow-chip">Room ${r}</span>
+        <div style="margin-top:4px;">
+          <span style="color:var(--sky); font-weight:700;">${info.name || ""}</span>
+          ${info.phone ? ` · <span style="color:var(--leaf); font-weight:700;">${info.phone}</span>` : ""}
+          ${info.advance ? ` · <span style="color:var(--amber); font-weight:700;">advance Rs.${info.advance}</span>` : ""}
+        </div>
+      </div>`;
+  }).join('');
   box.innerHTML = `<div class="date-room-link">
       <div>${niceDate} is booked for:</div>
-      <div style="margin-top:4px;">${bookedRooms.map(r=>`<span class="arrow-chip">Room ${r}</span>`).join('')}</div>
+      ${details}
     </div>`;
 }
 
