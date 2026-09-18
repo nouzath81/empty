@@ -108,6 +108,9 @@
   .day.selected{background:var(--teal); color:#fff;}
   .day.past{color:#c9c6b8; cursor:not-allowed;}
   .legend{ display:flex; gap:14px; font-size:26px; color:var(--muted); margin-top:10px; }
+  .date-room-link{ margin-top:14px; padding:10px 12px; background:var(--red-light); border:1px solid var(--red); border-radius:8px; font-size:26px; }
+  .date-room-link .arrow-chip{ display:inline-flex; align-items:center; gap:4px; background:#fff; border:1px solid var(--red); color:var(--red); border-radius:999px; padding:3px 10px; margin:4px 4px 0 0; }
+  .date-room-link .arrow-chip::before{ content:"→"; }
   .dot{width:8px; height:8px; border-radius:2px; display:inline-block; margin-right:4px;}
   .status{ padding:13px 14px; border-radius:8px; font-size:32px; font-weight:500; margin-bottom:14px; }
   .status.available{background:var(--teal-light); color:var(--teal-dark);}
@@ -163,6 +166,7 @@
       <span><span class="dot" style="background:var(--red-light); border:1px solid var(--red)"></span>Booked</span>
       <span><span class="dot" style="background:var(--teal)"></span>Selected</span>
     </div>
+    <div id="bookedForDate"></div>
   </div>
 
   <div id="statusBox"></div>
@@ -350,10 +354,25 @@ function renderCalendar(){
         renderCalendar();
         renderStatus();
         renderRoomCheckboxes();
+        renderBookedForDate();
       });
     }
     grid.appendChild(el);
   }
+}
+
+function renderBookedForDate(){
+  const box = document.getElementById('bookedForDate');
+  if(!selectedDate){ box.innerHTML = ""; return; }
+  const bookedRooms = ROOMS
+    .map(r => r.room)
+    .filter(room => !!bookings[key(room, selectedDate)]);
+  if(bookedRooms.length === 0){ box.innerHTML = ""; return; }
+  const niceDate = new Date(selectedDate + "T00:00:00").toLocaleDateString(undefined,{weekday:'short', month:'short', day:'numeric'});
+  box.innerHTML = `<div class="date-room-link">
+      <div>${niceDate} is booked for:</div>
+      <div style="margin-top:4px;">${bookedRooms.map(r=>`<span class="arrow-chip">Room ${r}</span>`).join('')}</div>
+    </div>`;
 }
 
 function renderStatus(){
@@ -427,7 +446,7 @@ document.getElementById('bookBtn').addEventListener('click', async ()=>{
   }
 
   nameEl.value = ""; phoneEl.value = ""; advanceEl.value = "";
-  renderCalendar(); renderStatus(); renderBookingList();
+  renderCalendar(); renderStatus(); renderBookingList(); renderBookedForDate();
 });
 
 let bookingSearchQuery = "";
@@ -476,7 +495,7 @@ function renderBookingList(){
         return;
       }
       delete bookings[k];
-      renderCalendar(); renderStatus(); renderBookingList();
+      renderCalendar(); renderStatus(); renderBookingList(); renderBookedForDate();
     });
     row.appendChild(btn);
     list.appendChild(row);
@@ -488,6 +507,7 @@ function renderAll(){
   renderCalendar();
   renderStatus();
   renderBookingList();
+  renderBookedForDate();
 }
 
 document.getElementById('bookingSearch').addEventListener('input', (e)=>{
