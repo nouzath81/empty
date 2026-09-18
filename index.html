@@ -159,7 +159,11 @@
   <div class="header-banner">
     <h1>Green Villa Oluvil</h1>
     <p class="sub">Room booking · pick one or more rooms and a date to check availability and book.</p>
-    <p class="sub" style="margin-top:10px;"><a href="admin.html" style="color:#fff;">Manage rooms →</a></p>
+    <p class="sub" style="margin-top:10px;">
+      <a href="admin.html" style="color:#fff;">Manage rooms →</a>
+      &nbsp;&nbsp;
+      <a href="bookings.html" style="color:#fff;">View bookings →</a>
+    </p>
   </div>
 
   <div class="layout-grid">
@@ -168,12 +172,6 @@
 <div class="card accent-sky">
     <h2>Select rooms</h2>
     <div id="roomCheckboxList"></div>
-  </div>
-
-  <div class="card accent-teal" style="margin-top:20px;">
-    <span class="label">Current bookings</span>
-    <input type="text" id="bookingSearch" placeholder="Search by guest name or phone number" style="margin-top:8px; margin-bottom:4px;">
-    <div class="booklist" id="bookingList"></div>
   </div>
 
   </div>
@@ -299,7 +297,7 @@ async function loadBookings(){
     });
   } catch(e){
     bookings = {};
-    document.getElementById('bookingList').innerHTML = '<p class="empty-note" style="color:var(--red);">Couldn\'t reach the database: ' + e.message + '</p>';
+    console.error("Couldn't reach the database:", e.message);
   }
 }
 
@@ -494,7 +492,7 @@ document.getElementById('bookBtn').addEventListener('click', async ()=>{
   }
 
   nameEl.value = ""; phoneEl.value = ""; advanceEl.value = "";
-  renderCalendar(); renderStatus(); renderBookingList(); renderBookedForDate();
+  renderCalendar(); renderStatus(); renderBookedForDate();
   renderAvailabilityGrid();
   showBookedFlash(roomList, name);
 });
@@ -511,76 +509,15 @@ function showBookedFlash(roomList, name){
   setTimeout(()=>{ overlay.remove(); }, 3000);
 }
 
-let bookingSearchQuery = "";
-
-function renderBookingList(){
-  const list = document.getElementById('bookingList');
-  const allEntries = Object.keys(bookings).sort();
-  if(allEntries.length === 0){
-    list.innerHTML = '<p class="empty-note">No bookings yet.</p>';
-    return;
-  }
-  const q = bookingSearchQuery.trim().toLowerCase();
-  const entries = q
-    ? allEntries.filter(k=>{
-        const info = bookings[k];
-        const name = (info.name || "").toLowerCase();
-        const phone = (info.phone || "").toLowerCase();
-        return name.includes(q) || phone.includes(q);
-      })
-    : allEntries;
-  if(entries.length === 0){
-    list.innerHTML = '<p class="empty-note">No bookings match your search.</p>';
-    return;
-  }
-  list.innerHTML = "";
-  entries.forEach(k=>{
-    const [room, date] = k.split("|");
-    const info = bookings[k];
-    const nice = new Date(date + "T00:00:00").toLocaleDateString(undefined,{month:'short', day:'numeric', year:'numeric'});
-    const row = document.createElement('div');
-    row.className = "row";
-    row.innerHTML = `<div>
-        <div style="font-weight:500;">Room ${room} — ${nice}</div>
-        <div style="color:var(--muted); font-size:24px; margin-top:2px;">
-          ${info.name || ""}${info.phone ? " · " + info.phone : ""}${info.amount ? " · rate Rs." + info.amount : ""}${info.advance ? " · advance Rs." + info.advance : ""}
-        </div>
-      </div>`;
-    const btn = document.createElement('button');
-    btn.className = "cancel";
-    btn.textContent = "Cancel";
-    btn.addEventListener('click', async ()=>{
-      try{
-        await apiDeleteBooking(room, date);
-      } catch(e){
-        alert("Couldn't cancel: " + e.message);
-        return;
-      }
-      delete bookings[k];
-      renderCalendar(); renderStatus(); renderBookingList(); renderBookedForDate();
-  renderAvailabilityGrid();
-    });
-    row.appendChild(btn);
-    list.appendChild(row);
-  });
-}
-
 function renderAll(){
   renderRoomCheckboxes();
   renderCalendar();
   renderStatus();
-  renderBookingList();
   renderBookedForDate();
   renderAvailabilityGrid();
 }
 
-document.getElementById('bookingSearch').addEventListener('input', (e)=>{
-  bookingSearchQuery = e.target.value;
-  renderBookingList();
-});
-
 async function init(){
-  document.getElementById('bookingList').innerHTML = '<p class="empty-note">Loading…</p>';
   await loadRooms();
   await loadBookings();
   renderAll();

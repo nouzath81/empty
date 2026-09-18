@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Green Villa Oluvil — Bookings</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1f2a44;
+    --paper:#eef1f8;
+    --card:#ffffff;
+    --line:#e2e6f0;
+    --teal:#0f766e;
+    --teal-dark:#0b4f4a;
+    --teal-light:#e3f6f4;
+    --leaf:#6d28d9;
+    --sky:#2563eb;
+    --sky-light:#e9f0fe;
+    --coral:#ea580c;
+    --coral-light:#fdece1;
+    --amber:#b45309;
+    --amber-light:#fdf1de;
+    --red:#b91c1c;
+    --red-light:#fdeaea;
+    --muted:#667085;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--paper); color:var(--ink); padding:20px 14px 40px; font-weight:500; }
+  .wrap{max-width:480px; margin:0 auto;}
+  .layout-grid{ display:block; }
+  .col-left, .col-right{ display:block; }
+  @media (min-width: 720px){
+    .wrap{ max-width:960px; padding:0 20px; }
+    body{ padding:32px 20px 48px; }
+    .layout-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:24px;
+      align-items:start;
+    }
+    .col-right{ position:sticky; top:24px; }
+    h1{ font-size:56px; }
+    .sub{ font-size:32px; }
+  }
+  @media (min-width: 1080px){
+    .wrap{ max-width:1080px; }
+  }
+  h1{ font-size:48px; font-weight:700; margin:0; letter-spacing:-0.01em; color:#fff; font-family:'Poppins',sans-serif; }
+  h2{ font-size:36px; font-weight:600; margin:0 0 10px; font-family:'Poppins',sans-serif; color:var(--teal-dark); }
+  .header-banner{
+    background: linear-gradient(135deg, var(--teal) 0%, #4338ca 55%, var(--leaf) 100%);
+    border-radius:18px; padding:24px 20px; margin-bottom:20px;
+    box-shadow: 0 8px 24px rgba(67,56,202,0.25);
+  }
+  .sub{ font-size:30px; color:rgba(255,255,255,0.88); margin:6px 0 0; }
+  .card{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:18px; margin-bottom:16px; border-top:4px solid var(--line); box-shadow:0 2px 10px rgba(31,42,68,0.06); }
+  .card.accent-amber{ border-top-color:var(--amber); }
+  .card.accent-sky{ border-top-color:var(--sky); }
+  .card.accent-coral{ border-top-color:var(--coral); }
+  .card.accent-teal{ border-top-color:var(--teal); }
+  .label{ font-size:28px; color:var(--muted); margin-bottom:6px; display:block; font-weight:600; }
+  select, input{
+    width:100%; padding:12px 12px; border:1px solid var(--line); border-radius:8px;
+    font-size:34px; background:var(--card); color:var(--ink); font-family:inherit;
+  }
+  .error{ color:var(--red); font-size:28px; margin-top:8px; }
+  .row-inline{ display:flex; gap:8px; align-items:flex-end; }
+  .row-inline > div{ flex:1; }
+  .btn{
+    padding:11px 15px; border:1px solid var(--line); border-radius:10px;
+    background:var(--card); color:var(--ink); font-size:32px; cursor:pointer; white-space:nowrap; font-weight:600;
+  }
+  .btn.primary{ background:linear-gradient(135deg, var(--teal), var(--sky)); color:#fff; border:none; }
+  .btn.save{ background:var(--sky-light); color:var(--sky); border:1px solid var(--sky); }
+  .btn.danger{ background:var(--red-light); color:var(--red); border:1px solid var(--red); }
+  .room-row{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:11px 8px; border-bottom:1px solid var(--line); gap:8px; border-radius:8px;
+  }
+  .room-row:last-child{ border-bottom:none; }
+  .room-row.booked{ background:var(--red-light); }
+  .room-row.booked label{ color:var(--red); font-weight:500; }
+  .room-row.booked .rate{ color:var(--red); background:var(--red-light); }
+  .room-check{ display:flex; align-items:center; gap:10px; flex:1; }
+  .room-check input[type=checkbox]{ width:20px; height:20px; flex:none; accent-color:var(--teal); }
+  .room-check label{ font-size:34px; cursor:pointer; flex:1; color:var(--ink); font-weight:600; }
+  .rate{ color:var(--teal-dark); font-size:28px; font-weight:700; background:var(--teal-light); padding:4px 12px; border-radius:999px; white-space:nowrap; }
+  .cal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+  .cal-head button{
+    border:1px solid var(--line); background:var(--card); border-radius:6px;
+    width:34px; height:34px; font-size:34px; cursor:pointer; color:var(--ink);
+  }
+  .cal-head span{font-size:32px; font-weight:600;}
+  .grid7{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; text-align:center; }
+  .dow{ font-size:24px; color:var(--muted); padding-bottom:4px; }
+  .day{
+    aspect-ratio:1; display:flex; align-items:center; justify-content:center;
+    border-radius:7px; font-size:32px; cursor:pointer; border:1px solid transparent; position:relative;
+  }
+  @media (min-width: 720px){
+    .day{ font-size:36px; }
+    .room-row{ padding:13px 8px; }
+    input[type=text], input[type=tel], input[type=number]{ padding:12px 14px; }
+  }
+  .day.empty{cursor:default;}
+  .day.today{border-color:var(--sky); background:var(--sky-light); color:var(--sky); font-weight:700;}
+  .day.booked{background:var(--red-light); color:var(--red);}
+  .day.selected{background:linear-gradient(135deg, var(--teal), var(--sky)); color:#fff; font-weight:700;}
+  .day.past{color:#c9c6b8; cursor:not-allowed;}
+  .legend{ display:flex; gap:14px; font-size:26px; color:var(--muted); margin-top:10px; }
+  .date-room-link{ margin-top:14px; padding:10px 12px; background:var(--red-light); border:1px solid var(--red); border-radius:8px; font-size:26px; }
+  .date-room-link .arrow-chip{ display:inline-flex; align-items:center; gap:4px; background:#fff; border:1px solid var(--red); color:var(--red); border-radius:999px; padding:3px 10px; margin:4px 4px 0 0; }
+  .date-room-link .arrow-chip::before{ content:"→"; }
+  .avail-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:8px; margin-top:4px; }
+  @media (min-width: 720px){ .avail-grid{ grid-template-columns:repeat(3,1fr); } }
+  .avail-chip{ display:flex; align-items:center; justify-content:space-between; gap:6px; padding:8px 10px; border-radius:8px; font-size:26px; border:1px solid var(--line); }
+  .avail-chip.free{ background:var(--teal-light); border-color:var(--teal); color:var(--teal-dark); }
+  .avail-chip.taken{ background:var(--red-light); border-color:var(--red); color:var(--red); }
+  .avail-chip .avail-tag{ font-size:22px; font-weight:700; text-transform:uppercase; letter-spacing:0.02em; }
+  .dot{width:8px; height:8px; border-radius:2px; display:inline-block; margin-right:4px;}
+  .status{ padding:13px 14px; border-radius:8px; font-size:32px; font-weight:500; margin-bottom:14px; }
+  .status.available{background:var(--teal-light); color:var(--teal-dark);}
+  .status.unavailable{background:var(--red-light); color:var(--red);}
+  .status.pick{background:var(--amber-light); color:var(--amber);}
+  button.book{
+    width:100%; padding:16px; border:none; border-radius:12px; background:linear-gradient(135deg, var(--teal), var(--leaf));
+    color:#fff; font-size:36px; font-weight:700; cursor:pointer; box-shadow:0 6px 16px rgba(15,118,110,0.3);
+  }
+  button.book:disabled{background:#c9c6b8; cursor:not-allowed;}
+  .booklist{font-size:30px;}
+  .booklist .row{ display:flex; justify-content:space-between; padding:10px 10px; border-bottom:1px solid var(--line); border-left:4px solid var(--teal); border-radius:6px; margin-bottom:6px; background:var(--teal-light); }
+  .booklist .row:last-child{border-bottom:none;}
+  .cancel{ color:var(--red); background:none; border:none; font-size:28px; cursor:pointer; text-decoration:underline; }
+  .empty-note{color:var(--muted); font-size:30px;}
+  .total-line{ font-size:30px; color:var(--muted); margin:8px 0 14px; }
+  .booked-flash-overlay{
+    position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,0.55); z-index:9999; padding:20px; text-align:center;
+  }
+  .booked-flash-text{
+    font-size:44px; font-weight:800; line-height:1.3; font-family:'Poppins',sans-serif;
+    animation: blinkColor 0.6s linear infinite;
+  }
+  @keyframes blinkColor{
+    0%{ color:#ff3b3b; opacity:1; }
+    16%{ color:#ff9b00; }
+    33%{ color:#ffe600; }
+    50%{ color:#33ff5e; opacity:0.4; }
+    66%{ color:#00c3ff; opacity:1; }
+    83%{ color:#a259ff; }
+    100%{ color:#ff3b3b; opacity:1; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header-banner">
+    <h1>Bookings</h1>
+    <p class="sub">Green Villa Oluvil · search and manage current bookings.</p>
+    <p class="sub" style="margin-top:10px;">
+      <a href="index.html" style="color:#fff;">← Back to booking</a>
+      &nbsp;&nbsp;
+      <a href="admin.html" style="color:#fff;">Manage rooms →</a>
+    </p>
+  </div>
+
+  <div class="card accent-teal">
+    <span class="label">Current bookings</span>
+    <input type="text" id="bookingSearch" placeholder="Search by guest name or phone number" style="margin-top:8px; margin-bottom:4px;">
+    <div class="booklist" id="bookingList"></div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://lsjsdklljnxpshiteihb.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxzanNka2xsam54cHNoaXRlaWhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk2MTgzMjMsImV4cCI6MjEwNTE5NDMyM30.3XKTjbAC6GHWP-fAOXN5XGkvQpjKic5oi8FSSx8tRN8';
+
+let bookings = {}; // key "room|date" -> {name, phone, advance, amount}
+let bookingSearchQuery = "";
+
+function key(room, dateStr){ return room + "|" + dateStr; }
+
+function sbHeaders(extra){
+  return Object.assign({ apikey: SUPABASE_KEY, Authorization: `Bearer ${SUPABASE_KEY}` }, extra || {});
+}
+
+async function apiGet(table){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?select=*`, { headers: sbHeaders() });
+  if(!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
+  return res.json();
+}
+async function apiDeleteBooking(room, date){
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/bookings?room=eq.${encodeURIComponent(room)}&date=eq.${encodeURIComponent(date)}`, {
+    method:'DELETE', headers: sbHeaders()
+  });
+  if(!res.ok) throw new Error(`${res.status}: ${await res.text()}`);
+}
+
+async function loadBookings(){
+  try{
+    const rows = await apiGet('bookings');
+    bookings = {};
+    rows.forEach(row=>{
+      bookings[key(row.room, row.date)] = { name: row.name, phone: row.phone, advance: row.advance, amount: row.amount };
+    });
+  } catch(e){
+    bookings = {};
+    document.getElementById('bookingList').innerHTML = '<p class="empty-note" style="color:var(--red);">Couldn\'t reach the database: ' + e.message + '</p>';
+  }
+}
+
+function renderBookingList(){
+  const list = document.getElementById('bookingList');
+  const allEntries = Object.keys(bookings).sort();
+  if(allEntries.length === 0){
+    list.innerHTML = '<p class="empty-note">No bookings yet.</p>';
+    return;
+  }
+  const q = bookingSearchQuery.trim().toLowerCase();
+  const entries = q
+    ? allEntries.filter(k=>{
+        const info = bookings[k];
+        const name = (info.name || "").toLowerCase();
+        const phone = (info.phone || "").toLowerCase();
+        return name.includes(q) || phone.includes(q);
+      })
+    : allEntries;
+  if(entries.length === 0){
+    list.innerHTML = '<p class="empty-note">No bookings match your search.</p>';
+    return;
+  }
+  list.innerHTML = "";
+  entries.forEach(k=>{
+    const [room, date] = k.split("|");
+    const info = bookings[k];
+    const nice = new Date(date + "T00:00:00").toLocaleDateString(undefined,{month:'short', day:'numeric', year:'numeric'});
+    const row = document.createElement('div');
+    row.className = "row";
+    row.innerHTML = `<div>
+        <div style="font-weight:600;">Room ${room} — ${nice}</div>
+        <div style="color:var(--muted); font-size:24px; margin-top:2px;">
+          ${info.name || ""}${info.phone ? " · " + info.phone : ""}${info.amount ? " · rate Rs." + info.amount : ""}${info.advance ? " · advance Rs." + info.advance : ""}
+        </div>
+      </div>`;
+    const btn = document.createElement('button');
+    btn.className = "cancel";
+    btn.textContent = "Cancel";
+    btn.addEventListener('click', async ()=>{
+      if(!confirm(`Cancel the booking for Room ${room} on ${nice}?`)) return;
+      try{
+        await apiDeleteBooking(room, date);
+      } catch(e){
+        alert("Couldn't cancel: " + e.message);
+        return;
+      }
+      delete bookings[k];
+      renderBookingList();
+    });
+    row.appendChild(btn);
+    list.appendChild(row);
+  });
+}
+
+document.getElementById('bookingSearch').addEventListener('input', (e)=>{
+  bookingSearchQuery = e.target.value;
+  renderBookingList();
+});
+
+async function init(){
+  document.getElementById('bookingList').innerHTML = '<p class="empty-note">Loading…</p>';
+  await loadBookings();
+  renderBookingList();
+}
+init();
+</script>
+</body>
+</html>
